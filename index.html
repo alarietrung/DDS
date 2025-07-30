@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="vi" class="light"> <!-- Default to light, JS will handle theme switching -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MITEN - Phân Loại Rác Thông Minh</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Be Vietnam Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Animations */
+        @keyframes pop-in {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .pop-in-animation { animation: pop-in 0.5s ease-out forwards; }
+        @keyframes scan-line {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        .scan-line-animation { animation: scan-line 2s linear infinite; }
+        
+        /* Hide scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Correct Dark Mode Icon Toggling */
+        .dark .sun-icon { display: inline-block; }
+        .dark .moon-icon { display: none; }
+        html:not(.dark) .sun-icon { display: none; }
+        html:not(.dark) .moon-icon { display: inline-block; }
+    </style>
+    <script>
+        // Tailwind config
+        tailwind.config = {
+          darkMode: 'class', // Enable class-based dark mode
+        }
+        
+        // Set theme on initial load to prevent FOUC (Flash of Unstyled Content)
+        function applyTheme() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
+        }
+        applyTheme();
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+
+    <!-- Main App Container -->
+    <div id="app-container" class="max-w-md mx-auto h-screen bg-white dark:bg-black flex flex-col shadow-2xl">
+        
+        <!-- App Screens -->
+        <main id="main-content" class="flex-grow overflow-y-auto no-scrollbar pb-20">
+            <!-- Onboarding Screen -->
+            <div id="onboarding-screen" class="h-full flex flex-col p-6 text-center justify-between">
+                <div class="absolute top-8 left-1/2 -translate-x-1/2 flex items-center space-x-2">
+                    <svg class="w-8 h-8 text-green-600" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM16.25 15.34C15.83 15.93 15.06 16.21 14.27 15.99L12 15.25L9.73 15.99C8.94 16.21 8.17 15.93 7.75 15.34C7.33 14.75 7.33 13.9 7.82 13.26L9.89 10.5L8.5 8.5C8.07 7.98 8.16 7.15 8.71 6.71C9.26 6.27 10.09 6.35 10.5 6.88L12 8.75L13.5 6.88C13.91 6.35 14.74 6.27 15.29 6.71C15.84 7.15 15.93 7.98 15.5 8.5L14.11 10.5L16.18 13.26C16.67 13.9 16.67 14.75 16.25 15.34Z"/>
+                    </svg>
+                    <span class="text-2xl font-bold text-gray-800 dark:text-gray-200">MITEN</span>
+                </div>
+                <div class="flex-grow flex flex-col justify-center items-center">
+                    <div id="onboarding-carousel" class="w-full">
+                        <div class="onboarding-slide"><img src="https://placehold.co/300x300/A7F3D0/14532D?text=🌍" class="mx-auto mb-6 rounded-full"><h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">Phân loại rác dễ dàng</h2><p class="text-gray-600 dark:text-gray-400">Quét rác thải của bạn và để AI của chúng tôi hướng dẫn bạn.</p></div>
+                        <div class="onboarding-slide hidden"><img src="https://placehold.co/300x300/FDE68A/B45309?text=🎁" class="mx-auto mb-6 rounded-full"><h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">Tích điểm đổi quà hấp dẫn</h2><p class="text-gray-600 dark:text-gray-400">Mỗi lần phân loại đúng, bạn sẽ nhận được điểm thưởng giá trị.</p></div>
+                        <div class="onboarding-slide hidden"><img src="https://placehold.co/300x300/BFDBFE/1E40AF?text=🤝" class="mx-auto mb-6 rounded-full"><h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">Chung tay vì Đồng Nai xanh</h2><p class="text-gray-600 dark:text-gray-400">Cùng cộng đồng xây dựng một môi trường sống bền vững.</p></div>
+                    </div>
+                    <div id="onboarding-dots" class="flex justify-center space-x-2 mt-8"><span class="dot active h-2 w-2 bg-green-600 rounded-full"></span><span class="dot h-2 w-2 bg-gray-300 dark:bg-gray-600 rounded-full"></span><span class="dot h-2 w-2 bg-gray-300 dark:bg-gray-600 rounded-full"></span></div>
+                </div>
+                <button id="onboarding-next-btn" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-green-700 transition-colors">Tiếp theo</button>
+            </div>
+
+            <div id="login-screen" class="hidden h-full flex flex-col p-6 text-center justify-center items-center">
+                <div class="flex items-center space-x-3 mb-4">
+                    <svg class="w-12 h-12 text-green-600" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM16.25 15.34C15.83 15.93 15.06 16.21 14.27 15.99L12 15.25L9.73 15.99C8.94 16.21 8.17 15.93 7.75 15.34C7.33 14.75 7.33 13.9 7.82 13.26L9.89 10.5L8.5 8.5C8.07 7.98 8.16 7.15 8.71 6.71C9.26 6.27 10.09 6.35 10.5 6.88L12 8.75L13.5 6.88C13.91 6.35 14.74 6.27 15.29 6.71C15.84 7.15 15.93 7.98 15.5 8.5L14.11 10.5L16.18 13.26C16.67 13.9 16.67 14.75 16.25 15.34Z"/></svg>
+                    <h1 class="text-5xl font-bold text-gray-800 dark:text-gray-100">MITEN</h1>
+                </div>
+                <p class="text-gray-600 dark:text-gray-400 mt-2 mb-12">Chào mừng bạn trở lại!</p>
+                <div class="w-full space-y-4"><button id="login-btn" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center space-x-2 hover:bg-green-700 transition-colors"><span>Đăng nhập với tư cách Khách</span></button><p class="text-xs text-gray-400 dark:text-gray-500 mt-4">Đây là bản demo. Nhấn để tiếp tục.</p></div>
+            </div>
+
+            <div id="home-screen" class="hidden p-6"><div class="flex justify-between items-center mb-6"><div><p class="text-gray-500 dark:text-gray-400">Xin chào,</p><h1 id="user-name" class="text-2xl font-bold text-gray-800 dark:text-gray-100">An Nguyễn</h1></div><div class="flex items-center bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300 font-bold px-4 py-2 rounded-full"><i data-lucide="gem" class="w-5 h-5 mr-2"></i><span id="user-points">1250</span></div></div><div class="bg-gradient-to-br from-green-500 to-emerald-600 text-white p-6 rounded-2xl mb-6 shadow-lg"><p class="text-lg">Thử thách tuần</p><h2 class="text-2xl font-bold my-1">Chuyên gia tái chế nhựa</h2><p class="text-green-100 mb-4">Phân loại 20 vật phẩm nhựa để nhận 100 điểm thưởng!</p><div class="w-full bg-green-400/50 rounded-full h-2.5"><div id="challenge-progress" class="bg-white rounded-full h-2.5" style="width: 45%"></div></div><p id="challenge-progress-text" class="text-right text-sm mt-1">9/20 vật phẩm</p></div><div><h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Nhiệm vụ hàng ngày</h3><div class="space-y-3"><div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-xl flex items-center justify-between"><div class="flex items-center"><div class="bg-blue-200 dark:bg-blue-900/50 p-2 rounded-lg mr-4"><i data-lucide="scan-line" class="w-6 h-6 text-blue-700 dark:text-blue-300"></i></div><div><p class="font-semibold text-gray-800 dark:text-gray-200">Quét 5 món rác</p><p class="text-sm text-gray-500 dark:text-gray-400">+20 điểm</p></div></div><span class="text-gray-500 dark:text-gray-400 font-medium">3/5</span></div><div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-xl flex items-center justify-between"><div class="flex items-center"><div class="bg-rose-200 dark:bg-rose-900/50 p-2 rounded-lg mr-4"><i data-lucide="newspaper" class="w-6 h-6 text-rose-700 dark:text-rose-300"></i></div><div><p class="font-semibold text-gray-800 dark:text-gray-200">Phân loại 1kg giấy</p><p class="text-sm text-gray-500 dark:text-gray-400">+50 điểm</p></div></div><span class="text-green-600 dark:text-green-400 font-medium">Hoàn thành</span></div></div></div></div>
+
+            <div id="scan-screen" class="hidden h-full flex flex-col bg-black text-white"><div class="p-4 flex justify-between items-center"><button id="close-scan-btn"><i data-lucide="x" class="w-6 h-6"></i></button><h2 class="font-bold">Quét Rác</h2><div class="w-6"></div></div><div id="scanner-view" class="flex-grow flex flex-col items-center justify-center p-4 relative overflow-hidden"><p class="mb-4 text-center">Hướng camera vào một món rác.<br>(Trong bản demo, hãy chọn một loại rác bên dưới)</p><div class="w-full max-w-xs h-64 bg-gray-800 rounded-2xl border-2 border-dashed border-gray-500 flex items-center justify-center relative"><i data-lucide="scan" class="w-16 h-16 text-gray-500"></i><div id="scan-line" class="hidden absolute left-0 w-full h-1 bg-green-400/50 shadow-[0_0_10px_theme(colors.green.400)] scan-line-animation"></div></div></div><div class="p-4 bg-gray-900"><h3 class="text-center font-semibold mb-4">Chọn để mô phỏng quét:</h3><div class="grid grid-cols-3 gap-4"><button class="scan-sim-btn bg-gray-800 p-3 rounded-lg text-center" data-type="plastic"><p class="text-3xl">🧴</p><p class="text-sm mt-1">Chai nhựa</p></button><button class="scan-sim-btn bg-gray-800 p-3 rounded-lg text-center" data-type="paper"><p class="text-3xl">📦</p><p class="text-sm mt-1">Hộp giấy</p></button><button class="scan-sim-btn bg-gray-800 p-3 rounded-lg text-center" data-type="organic"><p class="text-3xl">🍎</p><p class="text-sm mt-1">Hữu cơ</p></button></div></div></div>
+
+            <div id="rewards-screen" class="hidden p-6"><h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">Đổi Quà</h1><p class="text-gray-500 dark:text-gray-400 mb-6">Dùng điểm của bạn để nhận những ưu đãi hấp dẫn!</p><div class="bg-amber-100 dark:bg-amber-900/50 p-4 rounded-xl flex justify-between items-center mb-6"><span class="font-semibold text-amber-800 dark:text-amber-300">Điểm của bạn</span><span id="rewards-points" class="font-bold text-xl text-amber-900 dark:text-amber-200">1250</span></div><div id="rewards-list" class="grid grid-cols-2 gap-4"></div></div>
+
+            <div id="community-screen" class="hidden p-6"><h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Cộng Đồng</h1><div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-4"><h3 class="font-bold text-lg mb-4 text-gray-800 dark:text-gray-200 text-center">Bảng Xếp Hạng Tuần (Phường Trảng Dài)</h3><div id="leaderboard" class="space-y-3"></div></div></div>
+
+            <div id="profile-screen" class="hidden p-6">
+                <div class="flex justify-between items-center mb-6"><h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Tài Khoản</h1><button id="theme-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"><i data-lucide="sun" class="sun-icon w-5 h-5"></i><i data-lucide="moon" class="moon-icon w-5 h-5"></i></button></div>
+                <div class="flex flex-col items-center mb-8"><img src="https://placehold.co/100x100/A7F3D0/14532D?text=A" class="rounded-full mb-4" alt="User Avatar"><h2 id="profile-name" class="text-2xl font-bold text-gray-800 dark:text-gray-100">An Nguyễn</h2><p id="profile-join-date" class="text-gray-500 dark:text-gray-400">Tham gia tháng 7, 2025</p></div>
+                <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-2xl mb-6"><h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4">Tác động của bạn</h3><div class="grid grid-cols-3 gap-4 text-center"><div class="flex flex-col items-center"><i data-lucide="recycle" class="w-8 h-8 text-green-600 dark:text-green-400 mb-1"></i><p class="text-lg font-bold text-gray-800 dark:text-gray-200">15 kg</p><p class="text-sm text-gray-600 dark:text-gray-400">Tái chế</p></div><div class="flex flex-col items-center"><i data-lucide="zap" class="w-8 h-8 text-blue-600 dark:text-blue-400 mb-1"></i><p class="text-lg font-bold text-gray-800 dark:text-gray-200">25 kWh</p><p class="text-sm text-gray-600 dark:text-gray-400">Tiết kiệm</p></div><div class="flex flex-col items-center"><i data-lucide="award" class="w-8 h-8 text-amber-500 dark:text-amber-400 mb-1"></i><p class="text-lg font-bold text-gray-800 dark:text-gray-200">3</p><p class="text-sm text-gray-600 dark:text-gray-400">Huy hiệu</p></div></div></div>
+                <div class="space-y-2">
+                    <a href="#" class="flex items-center justify-between p-4 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><div class="flex items-center"><i data-lucide="history" class="w-5 h-5 mr-3 text-gray-500 dark:text-gray-400"></i><span class="font-medium text-gray-800 dark:text-gray-200">Lịch sử hoạt động</span></div><i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i></a>
+                    <a href="#" class="flex items-center justify-between p-4 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><div class="flex items-center"><i data-lucide="bell" class="w-5 h-5 mr-3 text-gray-500 dark:text-gray-400"></i><span class="font-medium text-gray-800 dark:text-gray-200">Thông báo</span></div><i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i></a>
+                    <a href="#" class="flex items-center justify-between p-4 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><div class="flex items-center"><i data-lucide="help-circle" class="w-5 h-5 mr-3 text-gray-500 dark:text-gray-400"></i><span class="font-medium text-gray-800 dark:text-gray-200">Trung tâm trợ giúp</span></div><i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i></a>
+                </div>
+                <button id="logout-btn" class="w-full mt-6 bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-300 font-bold py-3 px-4 rounded-xl hover:bg-red-200 dark:hover:bg-red-900/80 transition-colors">Đăng xuất</button>
+            </div>
+        </main>
+
+        <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white/80 dark:bg-black/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-800"><div class="flex justify-around items-center h-16"><button class="nav-btn p-2 text-green-600" data-target="home-screen"><i data-lucide="home" class="w-7 h-7"></i></button><button class="nav-btn p-2 text-gray-500 dark:text-gray-400" data-target="rewards-screen"><i data-lucide="gift" class="w-7 h-7"></i></button><button id="scan-btn" class="transform -translate-y-6"><div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white shadow-lg"><i data-lucide="scan-line" class="w-8 h-8"></i></div></button><button class="nav-btn p-2 text-gray-500 dark:text-gray-400" data-target="community-screen"><i data-lucide="users" class="w-7 h-7"></i></button><button class="nav-btn p-2 text-gray-500 dark:text-gray-400" data-target="profile-screen"><i data-lucide="user-circle" class="w-7 h-7"></i></button></div></nav>
+
+        <div id="scan-result-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50"><div id="scan-result-card" class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center w-full max-w-sm"></div></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- STATE & DATA ---
+            const state = { currentPage: 'onboarding-screen', user: { name: 'An Nguyễn', points: 1250, joinDate: 'tháng 7, 2025', challengeProgress: 9, challengeTotal: 20 }, onboarding: { currentIndex: 0, slides: document.querySelectorAll('.onboarding-slide'), dots: document.querySelectorAll('#onboarding-dots .dot') } };
+            const rewardsData = [ { partner: 'The Coffee House', title: 'Giảm 20,000đ', points: 2000, img: 'https://placehold.co/150x100/B91C1C/FFFFFF?text=Coffee' }, { partner: 'Circle K', title: 'Voucher 10,000đ', points: 1000, img: 'https://placehold.co/150x100/F59E0B/FFFFFF?text=Store' }, { partner: 'Bách Hóa Xanh', title: 'Giảm 25,000đ', points: 2500, img: 'https://placehold.co/150x100/10B981/FFFFFF?text=Green' }, { partner: 'Phúc Long', title: 'Miễn phí 1 ly trà', points: 5000, img: 'https://placehold.co/150x100/059669/FFFFFF?text=Tea' } ];
+            const leaderboardData = [ { name: 'Bảo Trân', points: 2580, avatar: 'https://placehold.co/40x40/FBCFE8/9D174D?text=B' }, { name: 'Bạn', points: state.user.points, avatar: 'https://placehold.co/40x40/A7F3D0/14532D?text=A', isUser: true }, { name: 'Minh Khang', points: 1150, avatar: 'https://placehold.co/40x40/BFDBFE/1E40AF?text=M' }, { name: 'Gia Hân', points: 980, avatar: 'https://placehold.co/40x40/FDE68A/B45309?text=G' } ];
+            const scanResults = { plastic: { name: 'Chai Nhựa PET', instruction: 'Bỏ vào túi <strong>RÁC TÁI CHẾ</strong>', points: 5, icon: '♻️' }, paper: { name: 'Hộp Giấy Carton', instruction: 'Bỏ vào túi <strong>RÁC TÁI CHẾ</strong>', points: 3, icon: '♻️' }, organic: { name: 'Rác Hữu Cơ', instruction: 'Bỏ vào túi <strong>RÁC HỮU CƠ</strong>', points: 2, icon: '🌿' } };
+
+            // --- DOM ELEMENTS ---
+            const mainContent = document.getElementById('main-content');
+            const allScreens = mainContent.querySelectorAll('div[id$="-screen"]');
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const themeToggle = document.getElementById('theme-toggle');
+
+            // --- CORE FUNCTIONS ---
+            function navigateTo(screenId) {
+                allScreens.forEach(screen => screen.classList.add('hidden'));
+                const targetScreen = document.getElementById(screenId);
+                targetScreen.classList.remove('hidden');
+                targetScreen.classList.add('flex', 'flex-col'); // Base class for layout
+                if (!['onboarding-screen', 'login-screen', 'scan-screen'].includes(screenId)) {
+                    targetScreen.classList.remove('flex', 'flex-col'); // Remove for screens with static content
+                }
+                
+                navButtons.forEach(btn => {
+                    const isActive = btn.dataset.target === screenId;
+                    btn.classList.toggle('text-green-600', isActive);
+                    btn.classList.toggle('dark:text-green-400', isActive);
+                    btn.classList.toggle('text-gray-500', !isActive);
+                    btn.classList.toggle('dark:text-gray-400', !isActive);
+                });
+                state.currentPage = screenId;
+                mainContent.scrollTop = 0;
+            }
+
+            function updateUI() {
+                document.getElementById('user-name').textContent = state.user.name;
+                document.getElementById('user-points').textContent = state.user.points;
+                document.getElementById('rewards-points').textContent = state.user.points;
+                document.getElementById('profile-name').textContent = state.user.name;
+                document.getElementById('profile-join-date').textContent = `Tham gia ${state.user.joinDate}`;
+                const progress = (state.user.challengeProgress / state.user.challengeTotal) * 100;
+                document.getElementById('challenge-progress').style.width = `${progress}%`;
+                document.getElementById('challenge-progress-text').textContent = `${state.user.challengeProgress}/${state.user.challengeTotal} vật phẩm`;
+                leaderboardData.find(u => u.isUser).points = state.user.points;
+                leaderboardData.sort((a, b) => b.points - a.points);
+                populateLeaderboard();
+            }
+
+            function populateRewards() {
+                document.getElementById('rewards-list').innerHTML = rewardsData.map(r => `<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden"><img src="${r.img}" alt="${r.partner}" class="w-full h-24 object-cover"><div class="p-3"><p class="font-semibold text-gray-700 dark:text-gray-200 text-sm">${r.partner}</p><p class="text-gray-600 dark:text-gray-400 text-xs mb-2">${r.title}</p><button class="w-full text-sm bg-amber-400 text-amber-900 font-bold py-1.5 rounded-lg hover:bg-amber-500 transition-colors">${r.points} điểm</button></div></div>`).join('');
+            }
+
+            function populateLeaderboard() {
+                document.getElementById('leaderboard').innerHTML = leaderboardData.map((user, index) => {
+                    const rank = index + 1;
+                    const bgColor = user.isUser ? 'bg-green-100 dark:bg-green-900/50' : 'bg-gray-100 dark:bg-gray-700/50';
+                    const rankColor = rank === 1 ? 'text-amber-500' : rank === 2 ? 'text-gray-500' : rank === 3 ? 'text-orange-700' : 'text-gray-400';
+                    return `<div class="${bgColor} p-3 rounded-lg flex items-center space-x-4"><span class="font-bold text-lg w-6 text-center ${rankColor}">${rank}</span><img src="${user.avatar}" alt="avatar" class="w-10 h-10 rounded-full"><div class="flex-grow"><p class="font-semibold text-gray-800 dark:text-gray-200">${user.name}</p></div><span class="font-bold text-green-700 dark:text-green-400">${user.points}</span></div>`;
+                }).join('');
+            }
+
+            function showScanResult(type) {
+                const result = scanResults[type];
+                if (!result) return;
+                const modal = document.getElementById('scan-result-modal');
+                document.getElementById('scan-result-card').innerHTML = `<p class="text-6xl mb-4">${result.icon}</p><h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">${result.name}</h2><p class="text-gray-600 dark:text-gray-400 mb-4">${result.instruction}</p><p class="text-lg font-bold text-amber-600 dark:text-amber-400 mb-6">+${result.points} điểm</p><button id="confirm-scan-btn" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-green-700 transition-colors">Xác nhận</button>`;
+                modal.classList.remove('hidden');
+                modal.querySelector('#scan-result-card').classList.add('pop-in-animation');
+                document.getElementById('confirm-scan-btn').addEventListener('click', () => {
+                    state.user.points += result.points;
+                    if (type === 'plastic') state.user.challengeProgress++;
+                    updateUI();
+                    modal.classList.add('hidden');
+                    modal.querySelector('#scan-result-card').classList.remove('pop-in-animation');
+                }, { once: true });
+            }
+
+            function handleOnboarding() {
+                const { slides, dots, currentIndex } = state.onboarding;
+                const nextBtn = document.getElementById('onboarding-next-btn');
+                slides[currentIndex].classList.add('hidden');
+                dots[currentIndex].classList.remove('active', 'bg-green-600');
+                dots[currentIndex].classList.add('bg-gray-300', 'dark:bg-gray-600');
+                
+                if (currentIndex === slides.length - 1) {
+                    navigateTo('login-screen');
+                    return;
+                }
+                
+                state.onboarding.currentIndex++;
+                slides[state.onboarding.currentIndex].classList.remove('hidden');
+                dots[state.onboarding.currentIndex].classList.add('active', 'bg-green-600');
+                dots[state.onboarding.currentIndex].classList.remove('bg-gray-300', 'dark:bg-gray-600');
+                
+                if (state.onboarding.currentIndex === slides.length - 1) {
+                    nextBtn.textContent = 'Bắt đầu';
+                }
+            }
+
+            // --- EVENT LISTENERS ---
+            navButtons.forEach(b => b.addEventListener('click', () => navigateTo(b.dataset.target)));
+            document.getElementById('scan-btn').addEventListener('click', () => navigateTo('scan-screen'));
+            document.getElementById('close-scan-btn').addEventListener('click', () => navigateTo(state.currentPage));
+            document.querySelectorAll('.scan-sim-btn').forEach(b => b.addEventListener('click', () => {
+                document.getElementById('scan-line').classList.remove('hidden');
+                setTimeout(() => {
+                    document.getElementById('scan-line').classList.add('hidden');
+                    navigateTo('home-screen');
+                    showScanResult(b.dataset.type);
+                }, 2000);
+            }));
+            document.getElementById('onboarding-next-btn').addEventListener('click', handleOnboarding);
+            document.getElementById('login-btn').addEventListener('click', () => { navigateTo('home-screen'); updateUI(); });
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                state.onboarding.currentIndex = 0;
+                document.getElementById('onboarding-next-btn').textContent = 'Tiếp theo';
+                navigateTo('onboarding-screen');
+                // Reset slides and dots for re-onboarding
+                state.onboarding.slides.forEach((s, i) => s.classList.toggle('hidden', i !== 0));
+                state.onboarding.dots.forEach((d, i) => {
+                    d.classList.toggle('active', i === 0);
+                    d.classList.toggle('bg-green-600', i === 0);
+                    d.classList.toggle('bg-gray-300', i !== 0);
+                    d.classList.toggle('dark:bg-gray-600', i !== 0);
+                });
+            });
+            themeToggle.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.theme = isDark ? 'dark' : 'light';
+            });
+
+            // --- INITIALIZATION ---
+            lucide.createIcons();
+            populateRewards();
+            updateUI();
+            navigateTo('onboarding-screen');
+        });
+    </script>
+</body>
+</html>
+
