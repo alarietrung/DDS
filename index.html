@@ -127,7 +127,19 @@
         document.addEventListener('DOMContentLoaded', () => {
             // --- STATE & DATA ---
             const state = { currentPage: 'onboarding-screen', user: { name: 'An Nguyễn', points: 1250, joinDate: 'tháng 7, 2025', challengeProgress: 9, challengeTotal: 20 }, onboarding: { currentIndex: 0, slides: document.querySelectorAll('.onboarding-slide'), dots: document.querySelectorAll('#onboarding-dots .dot') } };
-            const rewardsData = [ { partner: 'The Coffee House', title: 'Giảm 20,000đ', points: 2000, img: 'https://placehold.co/150x100/B91C1C/FFFFFF?text=Coffee' }, { partner: 'Circle K', title: 'Voucher 10,000đ', points: 1000, img: 'https://placehold.co/150x100/F59E0B/FFFFFF?text=Store' }, { partner: 'Bách Hóa Xanh', title: 'Giảm 25,000đ', points: 2500, img: 'https://placehold.co/150x100/10B981/FFFFFF?text=Green' }, { partner: 'Phúc Long', title: 'Miễn phí 1 ly trà', points: 5000, img: 'https://placehold.co/150x100/059669/FFFFFF?text=Tea' } ];
+            const rewardsData = [ { partner: 'The Coffee House', title: 'Giảm 20,000đ', points: 2000, img: 'https://placehold.co/150x100/B91C1C/FFFFFF?text=Coffee' }, { 
+    partner: 'PayPal', 
+    title: 'Nạp $5 USD', 
+    points: 10000, 
+    img: 'https://placehold.co/150x100/00457C/FFFFFF?text=PayPal' 
+},
+{ 
+    partner: 'Binance', 
+    title: 'Nạp 0.0001 BTC', 
+    points: 15000, 
+    img: 'https://placehold.co/150x100/F0B90B/000000?text=Binance' 
+},
+                                 { partner: 'Circle K', title: 'Voucher 10,000đ', points: 1000, img: 'https://placehold.co/150x100/F59E0B/FFFFFF?text=Store' }, { partner: 'Bách Hóa Xanh', title: 'Giảm 25,000đ', points: 2500, img: 'https://placehold.co/150x100/10B981/FFFFFF?text=Green' }, { partner: 'Phúc Long', title: 'Miễn phí 1 ly trà', points: 5000, img: 'https://placehold.co/150x100/059669/FFFFFF?text=Tea' } ];
             const leaderboardData = [ { name: 'Bảo Trân', points: 2580, avatar: 'https://placehold.co/40x40/FBCFE8/9D174D?text=B' }, { name: 'Bạn', points: state.user.points, avatar: 'https://placehold.co/40x40/A7F3D0/14532D?text=A', isUser: true }, { name: 'Minh Khang', points: 1150, avatar: 'https://placehold.co/40x40/BFDBFE/1E40AF?text=M' }, { name: 'Gia Hân', points: 980, avatar: 'https://placehold.co/40x40/FDE68A/B45309?text=G' } ];
             const scanResults = { plastic: { name: 'Chai Nhựa PET', instruction: 'Bỏ vào túi <strong>RÁC TÁI CHẾ</strong>', points: 5, icon: '♻️' }, paper: { name: 'Hộp Giấy Carton', instruction: 'Bỏ vào túi <strong>RÁC TÁI CHẾ</strong>', points: 3, icon: '♻️' }, organic: { name: 'Rác Hữu Cơ', instruction: 'Bỏ vào túi <strong>RÁC HỮU CƠ</strong>', points: 2, icon: '🌿' } };
 
